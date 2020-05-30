@@ -1,0 +1,9 @@
+numpy
+scipy
+scikit-learn
+Cython
+joblib
+six
+cvxpy
+cvxopt
+tqdm
