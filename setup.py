@@ -15,8 +15,8 @@ include_dirs = numpy.distutils.misc_util.get_numpy_include_dirs()
 
 extensions = cythonize(
     Extension(
-        "rba.cutils",
-        ["rba/cutils.pyx"],
+        "region-based-attack.cutils",
+        ["region-based-attack/cutils.pyx"],
         extra_link_args=extra_link_args,
         extra_compile_args=['-std=c11'],
         include_dirs=include_dirs,
@@ -45,7 +45,7 @@ tests_require = [
 
 setup(
     name='region-based-attack',
-    version='0.0.1',
+    version='0.0.1a',
     description='',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -62,12 +62,12 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    test_suite='rba',
+    test_suite='region-based-attack',
     packages=[
-        'rba'
+        'region-based-attack'
     ],
     package_dir={
-        'rba': 'rba',
+        'region-based-attack': 'region-based-attack',
     },
     ext_modules=extensions,
 )
