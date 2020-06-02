@@ -12,7 +12,7 @@ from joblib import Parallel, delayed
 import cvxpy as cp
 
 from ..base import AttackModel
-from .dt_opt import get_tree_constraints
+from .tree_utils import get_tree_constraints
 from ..solvers import solve_lp, solve_qp
 from ..knn import sol_sat_constraints, CONSTRAINTTOL
 
