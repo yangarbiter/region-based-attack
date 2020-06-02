@@ -15,6 +15,7 @@ from tqdm import tqdm
 
 from .cutils import c_get_half_space, get_all_half_spaces, get_constraints, check_feasibility
 from .solvers import solve_lp, solve_qp
+from .base import AttackModel
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -30,7 +31,7 @@ def get_half_space(a, b):
     c = sign * c
     return [w, c]
 
-class KNNAttackBase():
+class KNNAttackBase(AttackModel):
     def __init__(self, trnX, trny, n_neighbors=3, norm=2, n_jobs: int = 1,
                  verbose: int = 0):
         self.n_neighbors = n_neighbors
@@ -160,8 +161,11 @@ def sol_sat_constraints(G, h) -> bool:
     fet_dim = G.shape[1]
     c = np.zeros((fet_dim, 1))
     temph = h - CONSTRAINTTOL
-    status, _ = solve_lp(c=c, G=G, h=temph)
-    return (status == 'optimal')
+    try:
+        status, _ = solve_lp(c=c, G=G, h=temph)
+        return (status == 'optimal')
+    except:
+        return False
 
 def get_sol_l1(target_x, tuple_x, kdtree, glob_trnX,
         glob_trny, init_x=None, n_jobs=1):

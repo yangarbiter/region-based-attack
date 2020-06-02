@@ -25,8 +25,10 @@ def solve_lp(c, G=None, h=None, C=None, d=None, init_x=None, n_jobs=1, solver=cp
         prob.solve(solver=solver, **options)
     return prob.status, x.value
 
-def solve_qp(Q, q, G, h, n, C=None, d=None, init_x=None, n_jobs=1, solver=cp.CVXOPT):
+def solve_qp(Q, q, G, h, n, C=None, d=None, init_x=None, n_jobs=1, solver=cp.CVXOPT, **kwargs):
     options = {'threads': n_jobs}
+    if kwargs is not None:
+        options.update(kwargs)
     x = cp.Variable(shape=(n, 1))
     obj = cp.Minimize((1/2)*cp.quad_form(x, Q) + q.T @ x)
 
@@ -41,11 +43,7 @@ def solve_qp(Q, q, G, h, n, C=None, d=None, init_x=None, n_jobs=1, solver=cp.CVX
 
     try:
         prob.solve(solver=solver, **options)
-    except cp.error.SolverError:
-        try:
-            prob.solve(solver=solver, **options)
-        except cp.error.SolverError as e:
-            print(e)
-            logger.error("Rare")
-            return False, x.value
+    except cp.error.SolverError as e:
+        logger.error("QP solver error:", e)
+        return False, x.value
     return prob.status, x.value
